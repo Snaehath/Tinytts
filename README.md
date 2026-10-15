@@ -104,7 +104,7 @@ wav, sr = synthesize(
 
 ## Model Checkpoint & Release Download
 - **Release Version**: `v0.2.1`
-- **File**: `tinytts_20_a2_1_best.pt` (312 MB)
+- **File**: `tinytts_20_a2_1_best.pt` (~137 MB)
 - **Download**: Directly attach or download from [GitHub Releases](https://github.com/Snaehath/Tinytts/releases/tag/v0.2.1).
 - **Auto-Download**: If the checkpoint is not found locally at `checkpoints/tinytts_20_a2_1_best.pt`, `tinytts.load_model()` / `tinytts.synthesize()` will automatically download it on first use.
 
