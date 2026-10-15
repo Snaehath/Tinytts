@@ -1,0 +1,68 @@
+# TinyTTS-20-A2.1 Modelfile
+# High-speed, non-autoregressive Flow Matching Text-to-Speech Engine (~21M parameters)
+
+FROM ./checkpoints/tinytts_20_a2_1_best.pt
+
+# Model Metadata
+NAME "TinyTTS-20-A2.1"
+VERSION "0.2.1"
+AUTHOR "TinyTTS Research"
+ARCHITECTURE "Non-Autoregressive Transformer Encoder + Multi-Scale Temporal Adapter + Conv-CFM + Vocos"
+LICENSE "Apache-2.0"
+
+# Dataset Specification
+DATASET "LJSpeech-1.1"
+DATASET_URL "https://keithito.com/LJ-Speech-Dataset/"
+DATASET_LICENSE "Public Domain / CC0 1.0 Universal"
+LANGUAGE "en-US"
+SPEAKER "Single Female (Linda Johnson)"
+SAMPLE_RATE 22050
+
+# Parameter Configuration
+PARAMETER total_parameters 21083904
+PARAMETER sample_rate 22050
+PARAMETER mel_channels 80
+PARAMETER n_fft 1024
+PARAMETER hop_length 256
+PARAMETER win_length 1024
+
+# Acoustic & Encoder Hyperparameters
+PARAMETER text_hidden_dim 320
+PARAMETER text_num_layers 6
+PARAMETER text_num_heads 4
+PARAMETER text_ffn_dim 1280
+PARAMETER flow_hidden_dim 320
+PARAMETER flow_num_layers 8
+
+# Multi-Scale Temporal Conditioning Adapter (A2.1)
+PARAMETER adapter_type "multiscale"
+PARAMETER adapter_kernel_sizes [3, 7, 15]
+PARAMETER adapter_expansion 2
+PARAMETER adapter_num_layers 1
+
+# Inference Defaults
+PARAMETER flow_steps 8
+PARAMETER temperature 0.8
+PARAMETER pace_factor 1.0
+PARAMETER use_duration_predictor true
+PARAMETER vocoder "vocos"
+
+# Tag Schema Support
+TAGS [
+  "[whisper]",
+  "[slow]",
+  "[fast]",
+  "[pitch:high]",
+  "[pitch:low]",
+  "<pause>"
+]
+
+# Benchmark (100 Held-Out LJSpeech Evaluation)
+BENCHMARK_WER 0.5022
+BENCHMARK_CER 0.2413
+BENCHMARK_F0_CORR 0.6307
+BENCHMARK_LATENCY_MS 94.1
+BENCHMARK_RTF 0.043
+
+# Reference Inference Snippet
+# python -c "from tinytts.inference import synthesize_to_file; synthesize_to_file('Hello from TinyTTS!', 'output.wav')"

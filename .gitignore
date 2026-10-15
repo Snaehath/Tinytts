@@ -1,0 +1,48 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Testing & Coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Virtual Environments
+.venv/
+venv/
+ENV/
+env/
+
+# Packaging / Distribution
+build/
+dist/
+*.egg-info/
+
+# Exclude non-essential directories as requested
+tests/
+scripts/
+docs/
+web/
+
+# Datasets & raw data archives
+data/
+
+# Output directory (training logs, auxiliary dumps, intermediate checkpoints)
+outputs/
+
+# Checkpoints directory (model weights distributed via GitHub Releases)
+checkpoints/
+
+# Audio files: ignore all except the single demo sample
+*.wav
+!sample.wav
+
+# Miscellaneous
+package-lock.json
+
+# OS & IDE metadata
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

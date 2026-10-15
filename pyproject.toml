@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tinytts"
+version = "0.1.0"
+description = "Lightweight, controllable expressive text-to-speech for consumer GPUs"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "torch>=2.0.0",
+    "torchaudio>=2.0.0",
+    "soundfile>=0.12.0",
+    "tqdm>=4.65.0",
+    "matplotlib>=3.7.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["tinytts*"]
