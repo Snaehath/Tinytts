@@ -13,21 +13,20 @@ A sample generated audio file is included directly in the root of the repository
 
 ---
 
-## Benchmark Results
+## Performance & Benchmarks (TinyTTS-20-A2.1)
 
-Evaluated across **100 held-out sentences** from the LJSpeech evaluation manifest using automatic speech recognition (Wav2Vec2-Large-960h) and pitch correlation analysis:
+Evaluated on **100 held-out sentences** from the LJSpeech evaluation set on a consumer **NVIDIA RTX 3050 (4GB VRAM)**:
 
-| Model Architecture | Params | WER (%) | CER (%) | Substitution Ratio (%) | $r_{\text{F0}}$ (Pitch Corr) | Latency (P50) | RTF (RTX 3050) |
-| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **Baseline TinyTTS-20** | 20.77 M | 54.28% | 26.68% | 80.8% | 0.6196 | 83.1 ms | 0.038 |
-| **TinyTTS-20-A2** (ConvNeXt $k=7$) | 21.18 M | **48.31%** | **23.10%** | **80.4%** | 0.6187 | 94.3 ms | 0.043 |
-| **TinyTTS-20-A2.1** (Multi-Scale $k \in \{3,7,15\}$) | 21.08 M | 50.22% | 24.13% | 80.9% | **0.6307** | 94.1 ms | 0.043 |
-| **TinyTTS-20-A2.4** (AdaLN FiLM Conditioning) | 23.96 M | *Architecture Ablation* | — | — | — | — | — |
-
-### Key Benchmark Insights
-- **Temporal Context**: Adding a small depthwise convolutional adapter (+0.31M params) produces a **-5.97% absolute reduction in WER**.
-- **Multi-Scale Conditioning (A2.1)**: Parallel multi-resolution kernel receptive fields ($k \in \{3, 7, 15\}$) achieve the highest pitch correlation ($r_{\text{F0}} = 0.6307$), improving prosodic contour fidelity while keeping latency under 95 ms.
-- **Inference Speed**: Using an 8-step Euler ODE solver, TinyTTS achieves an RTF of **0.043** (generating 1 second of speech in ~43 milliseconds on a budget RTX 3050 GPU).
+| Metric | Value | Description |
+| :--- | :---: | :--- |
+| **Total Parameters** | **21.08 M** | Compact non-autoregressive flow model |
+| **Real-Time Factor (RTF)** | **0.043** | Synthesizes 1s of audio in ~43ms (23x faster than real-time) |
+| **Inference Latency (P50)** | **94.1 ms** | High-speed response time for interactive use |
+| **Flow Matching Steps** | **8 steps** | Fast Euler ODE integration |
+| **Pitch Correlation ($r_{\text{F0}}$)** | **0.631** | Pearson correlation with ground-truth pitch contour |
+| **Word Error Rate (WER)** | **50.2%** | Measured via pretrained Wav2Vec2-Large-960h ASR |
+| **Character Error Rate (CER)** | **24.1%** | Character-level phoneme transcription accuracy |
+| **VRAM Consumption** | **< 1.2 GB** | Fits comfortably on 4GB consumer GPUs |
 
 ---
 
@@ -49,20 +48,12 @@ Evaluated across **100 held-out sentences** from the LJSpeech evaluation manifes
 
 ### 1. Prerequisites
 - Python 3.9+
-- [Git Large File Storage (Git LFS)](https://git-lfs.com) (required to clone the 312MB `.pt` checkpoint)
-- NVIDIA GPU with CUDA recommended (runs on CPU as well)
+- NVIDIA GPU with CUDA recommended (also supports CPU inference)
 
 ### 2. Clone the Repository
 ```bash
-# Ensure Git LFS is installed and initialized
-git lfs install
-
-# Clone the repository
-git clone https://github.com/<your-username>/tts.git
-cd tts
-
-# Fetch the large checkpoint file via LFS
-git lfs pull
+git clone https://github.com/Snaehath/Tinytts.git
+cd Tinytts
 ```
 
 ### 3. Install Dependencies
@@ -70,6 +61,8 @@ git lfs pull
 pip install -r requirements.txt
 pip install -e .
 ```
+
+> **Model Checkpoint**: No Git LFS needed. The checkpoint (`tinytts_20_a2_1_best.pt`) is hosted on [GitHub Releases](https://github.com/Snaehath/Tinytts/releases/tag/v0.2.1). When you run `tinytts.synthesize()`, it will automatically download the checkpoint on first run. You can also manually download it into the `checkpoints/` directory if preferred.
 
 ---
 
